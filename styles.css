@@ -1,0 +1,125 @@
+/* General Reset and Base Styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #AF8260;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.timer-container {
+    border: solid #322C2B 5px;
+    border-radius: 12px;
+    margin: 5px 5px;
+    padding: 20vh 20px ;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 400px;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #322C2B;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Timer Display */
+.timer-display {
+    border: #322C2B 5px solid;
+    padding: 1rem;
+    border-radius: 5px;
+    background-color:#dbbe9d ;
+    font-size: 3rem;
+    color: #322C2B;
+    margin-bottom: 20px;
+}
+
+/* Flexbox Layout for Buttons */
+.timer-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.timer-controls button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #803D3B;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px; /* Reduced size */
+    font-size: 1.25rem; /* Slightly smaller font size */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    flex: 1 1 40%; /* Flexible basis with a minimum size */
+}
+
+.timer-controls button:hover {
+    background-color: #AF8260;
+    transform: scale(1.05);
+}
+
+/* Compact and Boxy Timer Inputs */
+.time-inputs {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    width: 100%;
+    justify-content: center;
+}
+
+.time-inputs input {
+    padding: 10px; /* Slightly larger padding */
+    font-size: 1.1rem; /* Slightly larger font size */
+    text-align: center;
+    border: 2px solid #322C2B;
+    border-radius: 8px; /* More boxy like buttons */
+    background-color: #E4C59E;
+    color: #322C2B;
+    width: 70px; /* Slightly larger width */
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+.time-inputs input:focus {
+    border-color: #803D3B;
+    outline: none;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #322C2B;
+}
+
+body.dark-mode .timer-container {
+    background-color: #803D3B;
+}
+
+body.dark-mode .timer-display,
+body.dark-mode h1 {
+    color: #E4C59E;
+}
+
+body.dark-mode .timer-controls button {
+    background-color: #AF8260;
+    color: #322C2B;
+}
+
+body.dark-mode .time-inputs input {
+    background-color: #322C2B;
+    color: #E4C59E;
+}
+
+body.dark-mode .time-inputs input:focus {
+    border-color: #AF8260;
+}
