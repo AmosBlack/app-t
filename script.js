@@ -14,6 +14,22 @@ const secondInput = document.getElementById('secondInput');
 // Load the sound
 const countdownSound = new Audio('beep.mp3');
 
+// Function to trigger a device vibration
+function vibrateDevice() {
+    if (navigator.vibrate) {
+        navigator.vibrate([500, 500, 500]); // Vibration pattern: vibrate for 500ms, pause for 500ms, then vibrate again
+    }
+}
+
+// Function to show a visual alert (like flashing or color change on the timer display)
+function showVisualAlert() {
+    const timerDisplay = document.querySelector('.timer-display');
+    timerDisplay.classList.add('alert'); // Add a class for alert (CSS will handle flashing)
+    setTimeout(() => {
+        timerDisplay.classList.remove('alert'); // Remove the class after 3 seconds
+    }, 3000);
+}
+
 function updateDisplay(minutes, seconds) {
     minutesDisplay.innerHTML = `<span>${String(minutes).padStart(2, '0')}</span>`;
     secondsDisplay.innerHTML = `<span>${String(seconds).padStart(2, '0')}</span>`;
@@ -39,9 +55,10 @@ function startTimer() {
                 startPauseBtn.querySelector('#playIcon').style.display = 'inline'; // Show play icon
                 startPauseBtn.querySelector('#pauseIcon').style.display = 'none'; // Hide pause icon
 
-                // Play sound once after the timer ends
+                // Play sound, vibrate device, and show visual alert
                 playEndSound();
-                
+                vibrateDevice();
+                showVisualAlert();
             }
         }, 1000);
     } else if (isRunning) {

@@ -123,3 +123,17 @@ body.dark-mode .time-inputs input {
 body.dark-mode .time-inputs input:focus {
     border-color: #AF8260;
 }
+
+/* Flashing effect when timer ends */
+.timer-display.alert {
+    animation: flash 0.5s alternate 6; /* Flash for 6 cycles (3 seconds) */
+}
+
+@keyframes flash {
+    from {
+        background-color: #AF8260; /* Initial background color */
+    }
+    to {
+        background-color: hsla(9, 85%, 40%, 0.671); /* Flash to red */
+    }
+}
