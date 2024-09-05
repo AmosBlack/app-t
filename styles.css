@@ -12,7 +12,7 @@ body {
 }
 
 .timer-container {
-    border: solid #322C2B 5px;
+/*  border: solid #322C2B 5px; */
     border-radius: 12px;
     margin: 5px 5px;
     padding: 20vh 20px ;
@@ -126,14 +126,17 @@ body.dark-mode .time-inputs input:focus {
 
 /* Flashing effect when timer ends */
 .timer-display.alert {
-    animation: flash 0.5s alternate 6; /* Flash for 6 cycles (3 seconds) */
+    animation: flash 0.5s alternate 10; /* Flash for 6 cycles (3 seconds) */
 }
 
 @keyframes flash {
     from {
-        background-color: #AF8260; /* Initial background color */
+        background-color: #E4C59E; /* Initial background color */
     }
     to {
-        background-color: hsla(9, 85%, 40%, 0.671); /* Flash to red */
+        background-color: #803D3B; /* Flash to red */
+        color: #dfd9d1;
+        border-color: #E4C59E;
+        transform: scale(1.05);
     }
 }
