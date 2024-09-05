@@ -12,6 +12,7 @@ body {
 }
 
 .timer-container {
+    border: solid #322C2B 5px;
     border-radius: 12px;
     margin: 5px 5px;
     padding: 20vh 20px ;
