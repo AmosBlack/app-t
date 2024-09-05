@@ -1,92 +1,81 @@
-let timer;
+let timerInterval;
 let isRunning = false;
-let remainingTime = 0;
+let remainingSeconds = 0;
+let audio = new Audio('beep.mp3');
 
-const minutesDisplay = document.getElementById('minutes');
-const secondsDisplay = document.getElementById('seconds');
-const startPauseBtn = document.getElementById('startPauseBtn');
-const resetBtn = document.getElementById('resetBtn');
-const restartBtn = document.getElementById('restartBtn');
-const endBtn = document.getElementById('endBtn');
-const minuteInput = document.getElementById('minuteInput');
-const secondInput = document.getElementById('secondInput');
+// Ensure audio is initialized on user interaction for iOS
+audio.load();
 
-// Load the sound
-const countdownSound = new Audio('beep.mp3');
-
-function updateDisplay(minutes, seconds) {
-    minutesDisplay.innerHTML = `<span>${String(minutes).padStart(2, '0')}</span>`;
-    secondsDisplay.innerHTML = `<span>${String(seconds).padStart(2, '0')}</span>`;
+// Function to update the timer display
+function updateTimerDisplay() {
+    let minutes = Math.floor(remainingSeconds / 60);
+    let seconds = remainingSeconds % 60;
+    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
 }
 
+// Function to start the timer
 function startTimer() {
-    if (!isRunning && remainingTime > 0) {
+    if (remainingSeconds > 0) {
         isRunning = true;
-        startPauseBtn.querySelector('#playIcon').style.display = 'none';
-        startPauseBtn.querySelector('#pauseIcon').style.display = 'inline'; // Show pause icon
-
-        timer = setInterval(() => {
-            remainingTime--;
-
-            const minutes = Math.floor(remainingTime / 60);
-            const seconds = remainingTime % 60;
-
-            updateDisplay(minutes, seconds);
-
-            if (remainingTime <= 0) {
-                clearInterval(timer);
+        timerInterval = setInterval(() => {
+            remainingSeconds--;
+            updateTimerDisplay();
+            
+            if (remainingSeconds <= 0) {
+                clearInterval(timerInterval);
                 isRunning = false;
-                startPauseBtn.querySelector('#playIcon').style.display = 'inline'; // Show play icon
-                startPauseBtn.querySelector('#pauseIcon').style.display = 'none'; // Hide pause icon
 
-                // Play sound once after the timer ends
-                playEndSound();
-                
+                // Play audio after the timer ends, ensure it's after user interaction for iOS
+                audio.play().catch(err => {
+                    console.error("Audio play blocked by iOS restrictions: ", err);
+                });
             }
         }, 1000);
-    } else if (isRunning) {
-        clearInterval(timer);
-        isRunning = false;
-        startPauseBtn.querySelector('#playIcon').style.display = 'inline'; // Show play icon
-        startPauseBtn.querySelector('#pauseIcon').style.display = 'none'; // Hide pause icon
     }
 }
 
-function playEndSound() {
-    countdownSound.currentTime = 0; // Reset sound to start
-    countdownSound.play(); // Play sound once
-}
-
-function resetTimer() {
-    clearInterval(timer);
+// Function to pause the timer
+function pauseTimer() {
+    clearInterval(timerInterval);
     isRunning = false;
-    const inputMinutes = parseInt(minuteInput.value) || 0;
-    const inputSeconds = parseInt(secondInput.value) || 0;
-    remainingTime = inputMinutes * 60 + inputSeconds;
-    updateDisplay(inputMinutes, inputSeconds);
-    startPauseBtn.querySelector('#playIcon').style.display = 'inline'; // Show play icon
-    startPauseBtn.querySelector('#pauseIcon').style.display = 'none'; // Hide pause icon
 }
 
+// Function to reset the timer
+function resetTimer() {
+    clearInterval(timerInterval);
+    isRunning = false;
+    remainingSeconds = 0;
+    updateTimerDisplay();
+}
+
+// Function to restart the timer
 function restartTimer() {
-    resetTimer();
+    clearInterval(timerInterval);
+    isRunning = false;
+    let minuteInput = parseInt(document.getElementById('minuteInput').value) || 0;
+    let secondInput = parseInt(document.getElementById('secondInput').value) || 0;
+    remainingSeconds = minuteInput * 60 + secondInput;
+    updateTimerDisplay();
     startTimer();
 }
 
-function endTimer() {
-    clearInterval(timer);
-    isRunning = false;
-    remainingTime = 0;
-    updateDisplay(0, 0);
-    startPauseBtn.querySelector('#playIcon').style.display = 'inline'; // Show play icon
-    startPauseBtn.querySelector('#pauseIcon').style.display = 'none'; // Hide pause icon
-}
+// Event listeners for buttons
+document.getElementById('startPauseBtn').addEventListener('click', () => {
+    if (!isRunning && remainingSeconds === 0) {
+        // Restart the timer if it's at 0
+        restartTimer();
+    } else if (isRunning) {
+        pauseTimer();
+    } else {
+        startTimer();
+    }
+});
 
-startPauseBtn.addEventListener('click', startTimer);
-resetBtn.addEventListener('click', resetTimer);
-restartBtn.addEventListener('click', restartTimer);
-endBtn.addEventListener('click', endTimer);
-
-// Initialize timer length from input when the input values change
-minuteInput.addEventListener('change', resetTimer);
-secondInput.addEventListener('change', resetTimer);
+document.getElementById('resetBtn').addEventListener('click', resetTimer);
+document.getElementById('restartBtn').addEventListener('click', restartTimer);
+document.getElementById('endBtn').addEventListener('click', () => {
+    resetTimer();
+    remainingSeconds = 0;
+    updateTimerDisplay();
+});
